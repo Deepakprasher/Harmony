@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Harmony Within · Mind-Body Wellness Compass</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --teal: #1a6b6b;
+    --teal-mid: #2a9898;
+    --teal-soft: #e0f2f2;
+    --teal-xs: #f0fafa;
+    --gold: #8b6914;
+    --gold-mid: #c49a2a;
+    --gold-soft: #fdf6e3;
+    --ink: #1c1c2e;
+    --ink-mid: #4a4a6a;
+    --ink-light: #8888aa;
+    --cream: #faf8f3;
+    --white: #ffffff;
+    --vata: #5b7ec4;
+    --pitta: #c45b5b;
+    --kapha: #5bc47a;
+    --shadow: 0 4px 24px rgba(26,107,107,0.10);
+    --shadow-lg: 0 8px 40px rgba(26,107,107,0.15);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--teal-soft); border-radius: 3px; }
+
+  /* MANDALA BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20vw; right: -20vw;
+    width: 60vw; height: 60vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,107,107,0.04) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  #nav {
+    position: sticky; top: 0; z-index: 200;
+    background: rgba(28,28,46,0.97);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(42,152,152,0.2);
+  }
+
+  .nav-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--teal-mid);
+    letter-spacing: 0.5px;
+    padding: 14px 0; margin-right: 32px;
+    white-space: nowrap;
+  }
+
+  .nav-tabs { display: flex; gap: 4px; flex: 1; overflow-x: auto; }
+  .nav-tabs::-webkit-scrollbar { height: 0; }
+
+  .nav-tab {
+    background: none; border: none;
+    color: var(--ink-light); cursor: pointer;
+    font-family: 'Jost', sans-serif; font-size: 13px; font-weight: 500;
+    padding: 14px 16px; border-bottom: 2px solid transparent;
+    transition: all 0.2s; white-space: nowrap;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .nav-tab:hover { color: var(--teal-mid); }
+  .nav-tab.active {
+    color: var(--teal-mid);
+    border-bottom-color: var(--teal-mid);
+  }
+  .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold-mid); flex-shrink: 0;
+  }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; animation: fadeUp 0.4s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .container { max-width: 820px; margin: 0 auto; padding: 36px 20px 60px; position: relative; z-index: 1; }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(26,107,107,0.08);
+  }
+  .card-gold {
+    background: linear-gradient(135deg, var(--gold-soft), var(--white));
+    border-color: rgba(139,105,20,0.15);
+  }
+  .card-teal {
+    background: linear-gradient(135deg, var(--teal-xs), var(--white));
+    border-color: rgba(26,107,107,0.12);
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* TYPOGRAPHY */
+  .display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px; font-weight: 300; line-height: 1.2;
+    color: var(--teal);
+  }
+  .heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600;
+    color: var(--ink);
+  }
+  .subheading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--teal);
+  }
+  .label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--ink-light);
+  }
+  .body-text { font-size: 14px; line-height: 1.7; color: var(--ink-mid); }
+  .italic {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 16px;
+    color: var(--gold);
+  }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex; align-items: center;
+    font-size: 12px; font-weight: 600;
+    padding: 4px 12px; border-radius: 20px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-bottom: 12px; }
+  .progress-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .progress-track {
+    height: 7px; border-radius: 4px;
+    background: var(--teal-soft); overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Jost', sans-serif; font-weight: 500;
+    border: none; border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.2s;
+    padding: 13px 28px; font-size: 14px;
+  }
+  .btn-primary { background: var(--teal); color: var(--white); }
+  .btn-primary:hover { background: var(--teal-mid); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,107,107,0.3); }
+  .btn-secondary {
+    background: var(--teal-soft); color: var(--teal);
+    border: 1px solid rgba(26,107,107,0.2);
+  }
+  .btn-secondary:hover { background: var(--teal-xs); }
+  .btn-gold { background: var(--gold); color: var(--white); }
+  .btn-gold:hover { background: var(--gold-mid); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+  .btn-full { width: 100%; justify-content: center; }
+
+  /* CHOICE BUTTONS */
+  .choice-btn {
+    width: 100%; text-align: left;
+    padding: 12px 16px; border-radius: var(--radius-sm);
+    background: var(--cream); border: 1.5px solid rgba(26,107,107,0.12);
+    font-family: 'Jost', sans-serif; font-size: 14px; color: var(--ink-mid);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .choice-btn:hover { border-color: var(--teal); color: var(--ink); }
+  .choice-btn.selected {
+    background: var(--teal-soft); border-color: var(--teal);
+    color: var(--teal); font-weight: 600;
+  }
+  .choice-btn .opt-num { color: var(--teal-mid); font-weight: 600; margin-right: 8px; }
+
+  /* HABIT CHECKS */
+  .habit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 480px) { .habit-grid { grid-template-columns: 1fr; } }
+  .habit-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; border-radius: var(--radius-sm);
+    border: 1.5px solid rgba(26,107,107,0.12);
+    background: var(--cream); cursor: pointer; transition: all 0.15s;
+    font-family: 'Jost', sans-serif; font-size: 13px; color: var(--ink-mid);
+  }
+  .habit-btn:hover { border-color: var(--teal); }
+  .habit-btn.checked {
+    background: var(--teal-soft); border-color: var(--teal); color: var(--teal); font-weight: 600;
+  }
+  .habit-icon { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+  .habit-check {
+    margin-left: auto; width: 20px; height: 20px;
+    border-radius: 50%; border: 2px solid rgba(26,107,107,0.3);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; transition: all 0.15s;
+  }
+  .habit-btn.checked .habit-check { background: var(--teal); border-color: var(--teal); color: white; }
+
+  /* RATING STARS */
+  .rating-row { display: flex; gap: 8px; }
+  .rating-btn {
+    flex: 1; padding: 9px 4px; border-radius: 8px; cursor: pointer;
+    background: var(--cream); border: 1.5px solid rgba(26,107,107,0.12);
+    font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 600; color: var(--ink-light);
+    transition: all 0.12s; text-align: center;
+  }
+  .rating-btn.active { background: var(--teal); border-color: var(--teal); color: white; }
+
+  /* TABS (inner) */
+  .inner-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .inner-tab {
+    padding: 8px 18px; border-radius: 8px;
+    font-family: 'Jost', sans-serif; font-size: 13px; font-weight: 500;
+    border: 1.5px solid rgba(26,107,107,0.15); cursor: pointer; transition: all 0.2s;
+    background: var(--white); color: var(--ink-mid);
+  }
+  .inner-tab.active { background: var(--teal); color: white; border-color: var(--teal); }
+
+  /* QUOTE BLOCK */
+  .quote-block {
+    border-left: 3px solid var(--gold-mid);
+    padding: 12px 20px; margin: 16px 0;
+    background: var(--gold-soft); border-radius: 0 8px 8px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 16px; color: var(--gold);
+    line-height: 1.6;
+  }
+
+  /* KLESHA CARD */
+  .klesha-card {
+    border-radius: var(--radius); padding: 20px;
+    border: 1px solid rgba(26,107,107,0.08);
+    background: var(--white); box-shadow: var(--shadow);
+    margin-bottom: 14px;
+  }
+
+  /* SEPARATOR */
+  .sep { height: 1px; background: var(--teal-soft); margin: 24px 0; }
+
+  /* STAT BOX */
+  .stat-box { text-align: center; padding: 20px 12px; }
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px; font-weight: 600; line-height: 1;
+  }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-light); margin-top: 6px; }
+
+  /* DOSHA BANNER */
+  .dosha-banner {
+    border-radius: var(--radius); padding: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+
+  /* CHART CONTAINERS */
+  .chart-wrap { position: relative; height: 220px; width: 100%; }
+
+  /* TEXTAREA */
+  textarea {
+    width: 100%; border: 1.5px solid rgba(26,107,107,0.15);
+    border-radius: var(--radius-sm); padding: 14px;
+    font-family: 'Jost', sans-serif; font-size: 14px; color: var(--ink);
+    background: var(--cream); resize: vertical; min-height: 90px;
+    outline: none; transition: border 0.2s; line-height: 1.6;
+  }
+  textarea:focus { border-color: var(--teal); }
+
+  /* TOAST */
+  #toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--teal); color: white;
+    font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 500;
+    padding: 12px 28px; border-radius: 30px; z-index: 999;
+    box-shadow: 0 6px 30px rgba(26,107,107,0.3);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* GUIDE PRACTICE ROW */
+  .practice-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; background: var(--cream); border-radius: 8px; margin-bottom: 8px;
+  }
+  .practice-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--teal);
+    flex-shrink: 0; margin-top: 5px;
+  }
+
+  /* HERO */
+  .hero-symbol {
+    font-size: 72px; line-height: 1;
+    color: var(--teal); opacity: 0.15;
+    position: absolute; top: -20px; right: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    pointer-events: none; user-select: none;
+  }
+
+  /* SECTION HEADER */
+  .section-header { margin-bottom: 20px; }
+  .section-header .display { font-size: 30px; }
+  .section-header p { color: var(--ink-light); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 16px; margin-top: 6px; }
+
+  /* MANTRA CARD */
+  .mantra-card {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 18px; background: var(--white); border-radius: var(--radius);
+    border: 1px solid rgba(26,107,107,0.08); box-shadow: var(--shadow);
+    margin-bottom: 12px;
+  }
+  .mantra-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--teal-soft); display: flex; align-items: center;
+    justify-content: center; font-size: 20px; flex-shrink: 0;
+  }
+
+  /* WELCOME CARD */
+  .welcome-card {
+    background: linear-gradient(135deg, rgba(26,107,107,0.06) 0%, rgba(139,105,20,0.04) 100%);
+    border: 1px solid rgba(26,107,107,0.12); border-radius: var(--radius);
+    padding: 48px 36px; text-align: center; position: relative; overflow: hidden;
+  }
+  .welcome-ornament {
+    position: absolute; opacity: 0.06;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px; line-height: 1;
+    color: var(--teal); top: -40px; left: 50%;
+    transform: translateX(-50%); pointer-events: none;
+  }
+
+  /* ALERT */
+  .alert {
+    padding: 14px 18px; border-radius: 10px;
+    font-size: 14px; margin-bottom: 16px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .alert-info { background: var(--teal-soft); color: var(--teal); border: 1px solid rgba(26,107,107,0.2); }
+  .alert-gold { background: var(--gold-soft); color: var(--gold); border: 1px solid rgba(139,105,20,0.2); }
+
+  /* PRINT/SHARE HINT */
+  .share-hint { font-size: 12px; color: var(--ink-light); text-align: center; margin-top: 10px; font-style: italic; }
+
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast">✓ Saved successfully</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-brand">⬡ The Harmony Within</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('home')" id="tab-home">
+      <span>◉</span> Home
+    </button>
+    <button class="nav-tab" onclick="showPage('assess')" id="tab-assess">
+      <span>◎</span> Assess <span class="nav-dot" id="assess-dot" style="display:none"></span>
+    </button>
+    <button class="nav-tab" onclick="showPage('track')" id="tab-track">
+      <span>◈</span> Track Daily
+    </button>
+    <button class="nav-tab" onclick="showPage('progress')" id="tab-progress">
+      <span>◇</span> Progress
+    </button>
+    <button class="nav-tab" onclick="showPage('guide')" id="tab-guide">
+      <span>✦</span> My Guide
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════ HOME ═══════════════════════════════════ -->
+<div class="page active" id="page-home">
+<div class="container">
+
+  <!-- No profile -->
+  <div id="home-welcome" style="display:none">
+    <div class="welcome-card">
+      <div class="welcome-ornament">ॐ</div>
+      <div style="position:relative">
+        <p class="label" style="color:var(--teal-mid); margin-bottom:12px">A Living Companion to the Book</p>
+        <h1 class="display" style="font-size:42px; margin-bottom:8px">The Harmony Within</h1>
+        <p class="italic" style="margin-bottom:24px; font-size:18px">Integrated Wellness Compass · Kleshas · Doshas · Yoga · Chanting</p>
+        <p class="body-text" style="max-width:520px; margin:0 auto 32px">
+          Discover your Ayurvedic constitution and active mental afflictions through guided assessments, 
+          then receive a personalized practice protocol and track your progress over time.
+        </p>
+        <button class="btn btn-primary" onclick="showPage('assess')" style="font-size:16px; padding:16px 40px">
+          Begin Your Assessment →
+        </button>
+        <p class="share-hint" style="margin-top:16px">All data is stored privately in your browser</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Has profile -->
+  <div id="home-dashboard" style="display:none">
+    <div style="position:relative">
+      <div class="hero-symbol">ॐ</div>
+      <div class="section-header">
+        <div class="display">Your Wellness Compass</div>
+        <p id="home-greeting">Good morning — your practice awaits.</p>
+      </div>
+    </div>
+
+    <!-- Dosha banner -->
+    <div class="dosha-banner card" id="dosha-banner" style="margin-bottom:16px">
+      <div>
+        <p class="label" style="margin-bottom:6px">Your Ayurvedic Constitution</p>
+        <div class="heading" id="dosha-title" style="font-size:28px; margin-bottom:10px"></div>
+        <div id="dosha-badges" style="display:flex; gap:8px; flex-wrap:wrap"></div>
+      </div>
+      <div id="dosha-emoji" style="font-size:56px; margin-left:16px"></div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:16px">
+      <!-- Primary klesha -->
+      <div class="card">
+        <p class="label" style="margin-bottom:8px">Primary Klesha to Address</p>
+        <div class="subheading" id="home-klesha-name" style="margin-bottom:6px"></div>
+        <p class="body-text" id="home-klesha-tip" style="font-size:13px; font-style:italic; line-height:1.6"></p>
+      </div>
+      <!-- Today log -->
+      <div class="card">
+        <p class="label" style="margin-bottom:8px">Today's Practice</p>
+        <div id="home-today-empty" style="display:none">
+          <p class="body-text" style="font-size:13px; margin-bottom:12px">Not logged yet today</p>
+          <button class="btn btn-secondary" onclick="showPage('track')" style="padding:8px 16px; font-size:13px">Log Today →</button>
+        </div>
+        <div id="home-today-data" style="display:none">
+          <div style="display:flex; align-items:baseline; gap:6px; margin-bottom:8px">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:600; color:var(--teal)" id="home-habit-count">0</span>
+            <span style="font-size:13px; color:var(--ink-light)">practices today</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill" id="home-wellbeing-bar" style="background:var(--teal); width:0%"></div></div>
+          </div>
+          <p style="font-size:12px; color:var(--ink-light); margin-top:4px">Wellbeing: <strong id="home-wellbeing-pct" style="color:var(--teal)">—</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's mantra -->
+    <div class="card card-gold" style="text-align:center; padding:24px 28px">
+      <p class="label" style="color:var(--gold); margin-bottom:8px">Today's Recommended Mantra</p>
+      <div style="font-family:'Cormorant Garamond',serif; font-size:26px; font-style:italic; color:var(--ink); margin-bottom:6px" id="home-mantra"></div>
+      <p style="font-size:13px; color:var(--ink-light)" id="home-mantra-use"></p>
+    </div>
+
+    <!-- Quick stats if data exists -->
+    <div id="home-stats" style="display:none; margin-top:16px">
+      <div class="grid-3">
+        <div class="card stat-box">
+          <div class="stat-value" style="color:var(--teal)" id="stat-days">0</div>
+          <div class="stat-label">Days Tracked</div>
+        </div>
+        <div class="card stat-box">
+          <div class="stat-value" style="color:var(--gold)" id="stat-wellbeing">—</div>
+          <div class="stat-label">Avg Wellbeing</div>
+        </div>
+        <div class="card stat-box">
+          <div class="stat-value" style="color:var(--pitta)" id="stat-streak">0</div>
+          <div class="stat-label">Day Streak 🔥</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ ASSESS ═══════════════════════════════════ -->
+<div class="page" id="page-assess">
+<div class="container">
+
+  <!-- Intro -->
+  <div id="assess-intro">
+    <div class="section-header">
+      <div class="display">Constitutional Assessment</div>
+      <p>Discover your Prakriti (Dosha profile) and active Kleshas</p>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="grid-2" style="gap:24px">
+        <div>
+          <div class="subheading" style="margin-bottom:10px">🌿 Part 1 — Dosha Profile</div>
+          <p class="body-text">10 questions about your lifelong physical and psychological tendencies. Reveals your unique balance of <strong>Vata</strong> (Air+Space), <strong>Pitta</strong> (Fire+Water), and <strong>Kapha</strong> (Water+Earth).</p>
+        </div>
+        <div>
+          <div class="subheading" style="margin-bottom:10px">🔮 Part 2 — Klesha Profile</div>
+          <p class="body-text">10 questions rating the five mental afflictions identified by Patanjali: <strong>Avidya, Asmita, Raga, Dvesha,</strong> and <strong>Abhinivesha</strong>.</p>
+        </div>
+      </div>
+    </div>
+    <div class="alert alert-gold">
+      <span>✦</span>
+      <span>Answer based on your <em>lifelong natural tendencies</em>, not just how you feel this week. Honest answers give the most useful results.</span>
+    </div>
+    <button class="btn btn-primary btn-full" style="padding:16px; font-size:15px" onclick="startAssessment()">
+      Begin Assessment · ~10 minutes →
+    </button>
+    <div id="retake-note" style="display:none; text-align:center; margin-top:12px">
+      <button onclick="startAssessment()" class="btn btn-secondary">Retake Assessment</button>
+    </div>
+  </div>
+
+  <!-- Quiz area -->
+  <div id="assess-quiz" style="display:none">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
+      <div>
+        <span class="label" id="quiz-phase-label">PART 1 — DOSHA</span>
+        <div class="subheading" id="quiz-part-title" style="font-size:18px; margin-top:4px">Physical & Mental Constitution</div>
+      </div>
+      <div style="text-align:right">
+        <span style="font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:var(--teal)" id="quiz-counter">1 / 10</span>
+      </div>
+    </div>
+    <!-- Progress -->
+    <div class="progress-wrap" style="margin-bottom:24px">
+      <div class="progress-track" style="height:4px"><div class="progress-fill" id="quiz-progress-bar" style="background:var(--teal-mid); width:0%"></div></div>
+    </div>
+    <!-- Question -->
+    <div class="card" id="quiz-question-card">
+      <p style="font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--ink); margin-bottom:16px; line-height:1.4" id="quiz-question-text"></p>
+      <div id="quiz-options" style="display:flex; flex-direction:column; gap:9px"></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:16px">
+      <button class="btn btn-primary" id="quiz-next-btn" onclick="quizNext()" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="assess-results" style="display:none">
+    <div class="section-header">
+      <div class="display">Your Assessment Results</div>
+      <p>Your unique mind-body blueprint</p>
+    </div>
+
+    <!-- Dosha result -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="subheading" style="margin-bottom:16px">Dosha Profile</div>
+      <div id="result-dosha-dominant" style="margin-bottom:16px"></div>
+      <div id="result-dosha-bars"></div>
+      <div class="quote-block" id="result-dosha-desc" style="margin-top:16px"></div>
+    </div>
+
+    <!-- Klesha result -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="subheading" style="margin-bottom:4px">Klesha Profile</div>
+      <p class="body-text" style="margin-bottom:16px; font-size:13px">The mental afflictions currently most active in your experience</p>
+      <div id="result-klesha-bars"></div>
+    </div>
+
+    <!-- Top insights -->
+    <div class="card card-gold" style="margin-bottom:20px">
+      <div class="subheading" style="margin-bottom:12px">Your Personalized Protocol</div>
+      <div id="result-protocol"></div>
+    </div>
+
+    <button class="btn btn-primary btn-full" style="padding:16px; font-size:15px" onclick="saveAssessment()">
+      Save & Begin Tracking →
+    </button>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ TRACK ═══════════════════════════════════ -->
+<div class="page" id="page-track">
+<div class="container">
+  <div class="section-header">
+    <div class="display">Daily Practice Log</div>
+    <p id="track-date-display"></p>
+  </div>
+
+  <div id="track-no-profile" class="alert alert-info" style="display:none">
+    <span>◎</span>
+    <span>Complete your <button onclick="showPage('assess')" style="background:none;border:none;color:var(--teal);cursor:pointer;font-weight:600;text-decoration:underline;font-size:14px">assessment</button> first to see your personalized practice recommendations.</span>
+  </div>
+
+  <!-- Practices -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="subheading" style="margin-bottom:4px">Practices Completed Today</div>
+    <p class="body-text" style="font-size:13px; margin-bottom:16px">Check each practice you completed</p>
+    <div class="habit-grid" id="habits-grid"></div>
+    <div style="margin-top:14px; padding:10px 14px; background:var(--teal-soft); border-radius:8px; display:flex; justify-content:space-between; align-items:center">
+      <span style="font-size:13px; color:var(--teal)"><strong id="habit-done-count">0</strong> of <span id="habit-total-count">8</span> completed</span>
+      <div class="progress-fill" style="width:60px; height:6px; background:rgba(26,107,107,0.15); border-radius:3px; overflow:hidden">
+        <div id="habit-mini-bar" style="height:100%; background:var(--teal); width:0%; transition:width 0.4s; border-radius:3px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wellbeing check-in -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="subheading" style="margin-bottom:4px">Wellbeing Check-In</div>
+    <p class="body-text" style="font-size:13px; margin-bottom:20px; font-style:italic">Rate each dimension from 1 (low) to 5 (excellent)</p>
+    <div id="wellbeing-grid"></div>
+  </div>
+
+  <!-- Klesha moment -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="subheading" style="margin-bottom:4px">Klesha Moment Tracker</div>
+    <p class="body-text" style="font-size:13px; margin-bottom:14px">Which mental affliction was most present today?</p>
+    <div style="display:flex; gap:8px; flex-wrap:wrap" id="klesha-today-btns"></div>
+    <div id="klesha-today-remedy" style="display:none; margin-top:14px; padding:14px; border-radius:10px; background:var(--teal-soft)">
+      <p class="label" style="margin-bottom:6px; color:var(--teal)">Suggested Practice</p>
+      <p style="font-size:14px; font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--ink)" id="klesha-remedy-text"></p>
+    </div>
+  </div>
+
+  <!-- Reflection -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="subheading" style="margin-bottom:8px">Reflection Notes</div>
+    <textarea id="notes-area" placeholder="How did your practice feel today? Any insights, shifts, or observations about your Kleshas or Dosha balance…"></textarea>
+  </div>
+
+  <button class="btn btn-primary btn-full" style="padding:16px; font-size:15px" id="save-log-btn" onclick="saveLog()">
+    Save Today's Log
+  </button>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ PROGRESS ═══════════════════════════════════ -->
+<div class="page" id="page-progress">
+<div class="container">
+  <div class="section-header">
+    <div class="display">Your Progress</div>
+    <p>Tracking transformation over time</p>
+  </div>
+
+  <div id="progress-empty" style="display:none">
+    <div class="card" style="text-align:center; padding:48px">
+      <div style="font-size:40px; margin-bottom:12px">◇</div>
+      <div class="heading" style="margin-bottom:8px">No data yet</div>
+      <p class="body-text" style="margin-bottom:20px">Log a few days of practice using the Track tab to see your progress visualized here.</p>
+      <button class="btn btn-primary" onclick="showPage('track')">Start Logging →</button>
+    </div>
+  </div>
+
+  <div id="progress-data">
+    <!-- Summary stats -->
+    <div class="grid-3" style="margin-bottom:16px">
+      <div class="card stat-box">
+        <div class="stat-value" style="color:var(--teal)" id="p-days">0</div>
+        <div class="stat-label">Days Logged</div>
+      </div>
+      <div class="card stat-box">
+        <div class="stat-value" style="color:var(--gold)" id="p-wellbeing">—</div>
+        <div class="stat-label">Avg Wellbeing</div>
+      </div>
+      <div class="card stat-box">
+        <div class="stat-value" style="color:var(--pitta)" id="p-streak">0</div>
+        <div class="stat-label">Streak 🔥</div>
+      </div>
+    </div>
+
+    <!-- Wellbeing trend chart -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="subheading" style="margin-bottom:16px">Overall Wellbeing Trend</div>
+      <div class="chart-wrap"><canvas id="chart-wellbeing"></canvas></div>
+    </div>
+
+    <!-- Dimension breakdown -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="subheading" style="margin-bottom:16px">Wellbeing Dimensions</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="chart-dimensions"></canvas></div>
+    </div>
+
+    <!-- Practice consistency -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="subheading" style="margin-bottom:16px">Practice Consistency</div>
+      <div class="chart-wrap" style="height:180px"><canvas id="chart-habits"></canvas></div>
+    </div>
+
+    <!-- Klesha frequency -->
+    <div class="card">
+      <div class="subheading" style="margin-bottom:16px">Klesha Patterns (logged days)</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="chart-kleshas"></canvas></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ GUIDE ═══════════════════════════════════ -->
+<div class="page" id="page-guide">
+<div class="container">
+  <div class="section-header">
+    <div class="display">Your Practice Guide</div>
+    <p>Personalized protocols drawn from Ayurveda, Yoga &amp; Chanting</p>
+  </div>
+
+  <div class="inner-tabs">
+    <button class="inner-tab active" onclick="showGuideTab('dosha')" id="gtab-dosha">Dosha Protocol</button>
+    <button class="inner-tab" onclick="showGuideTab('klesha')" id="gtab-klesha">Klesha Remedies</button>
+    <button class="inner-tab" onclick="showGuideTab('mantras')" id="gtab-mantras">Mantra Library</button>
+    <button class="inner-tab" onclick="showGuideTab('dinacharya')" id="gtab-dinacharya">Daily Rhythm</button>
+  </div>
+
+  <!-- DOSHA TAB -->
+  <div id="guide-dosha">
+    <div id="guide-dosha-banner" class="alert alert-info" style="margin-bottom:16px"></div>
+    <div id="guide-dosha-content"></div>
+  </div>
+
+  <!-- KLESHA TAB -->
+  <div id="guide-klesha" style="display:none">
+    <div id="guide-klesha-content"></div>
+  </div>
+
+  <!-- MANTRAS TAB -->
+  <div id="guide-mantras" style="display:none">
+    <div id="guide-mantras-content"></div>
+  </div>
+
+  <!-- DINACHARYA TAB -->
+  <div id="guide-dinacharya" style="display:none">
+    <div id="guide-dinacharya-content"></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════ SCRIPT ═══════════════════ -->
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────────────
+
+const DOSHA_Q = [
+  { q: "My body frame is naturally", opts: ["Thin, light — I find it hard to gain weight", "Medium, muscular, well-proportioned", "Broad or heavy — I tend to gain weight easily"] },
+  { q: "My skin tends to be", opts: ["Dry, rough, cool to touch", "Warm, oily or combination, prone to redness", "Thick, smooth, cool and moist"] },
+  { q: "My hair is naturally", opts: ["Dry, thin, frizzy or curly", "Fine, may grey early, can be oily", "Thick, lustrous, wavy and oily"] },
+  { q: "My digestion is typically", opts: ["Irregular — prone to gas and bloating", "Strong — I can digest almost anything", "Slow and steady — I rarely feel hungry"] },
+  { q: "My sleep pattern is", opts: ["Light, easily disturbed, often restless", "Moderate; I wake if I'm warm", "Heavy and deep; I love sleeping in"] },
+  { q: "Under stress I tend to", opts: ["Become anxious, worried or scattered", "Become irritable, critical or intense", "Withdraw, become heavy or shut down"] },
+  { q: "My natural energy level is", opts: ["Variable — comes in bursts, tires easily", "Strong and sustained when focused", "Steady and enduring, though slow to start"] },
+  { q: "My memory is typically", opts: ["Quick to grasp, quick to forget", "Sharp, precise and analytical", "Slow to learn but retains things long-term"] },
+  { q: "My natural temperament is", opts: ["Creative, enthusiastic, changeable", "Focused, ambitious, intense", "Patient, stable, loyal and nurturing"] },
+  { q: "In cold weather I", opts: ["Feel very uncomfortable — I dislike cold most", "Feel fine or even comfortable", "Feel uncomfortable mainly when it's damp"] },
+];
+
+const KLESHA_Q = [
+  { q: "How often do you believe your worth depends on external achievement or approval?", klesha: "Avidya" },
+  { q: "How strongly do you identify with your roles, titles or social image?", klesha: "Asmita" },
+  { q: "How often do you feel an intense craving for a specific person, outcome or experience to feel okay?", klesha: "Raga" },
+  { q: "How often do you resist, avoid or feel irritated by things outside your control?", klesha: "Dvesha" },
+  { q: "How much does the thought of change, loss, aging or death create anxiety or dread?", klesha: "Abhinivesha" },
+  { q: "How often do you mistake temporary pleasures for lasting happiness?", klesha: "Avidya" },
+  { q: "How frequently does the need to be right, recognized or special drive your reactions?", klesha: "Asmita" },
+  { q: "How often do obsessive thoughts about a desired outcome dominate your mind?", klesha: "Raga" },
+  { q: "How often does anger, resentment or blame arise when things don't meet your expectations?", klesha: "Dvesha" },
+  { q: "How tightly do you hold on to the familiar, even knowing change would be beneficial?", klesha: "Abhinivesha" },
+];
+
+const KLESHA_DATA = {
+  Avidya:     { color: "#9B59B6", mantra: "Gayatri Mantra",          practice: "Self-inquiry meditation & Nada Yoga",         tip: "Ask daily: 'What am I assuming to be permanent that is actually changing?'" },
+  Asmita:     { color: "#E67E22", mantra: "So Hum",                  practice: "Witnessing meditation & Selfless Service",    tip: "Notice when 'I need to be right or recognized' arises — observe without acting on it." },
+  Raga:       { color: "#E74C3C", mantra: "Om Shanti Shanti Shanti", practice: "Vairagya practice & Yoga Nidra",              tip: "When craving surges, breathe and ask: 'Can I be at peace right now, as things are?'" },
+  Dvesha:     { color: "#2980B9", mantra: "Om Mani Padme Hum",       practice: "Loving-kindness (Metta) meditation",          tip: "When aversion arises, soften the body and silently offer compassion to yourself and the situation." },
+  Abhinivesha:{ color: "#27AE60", mantra: "Mrityunjaya Mantra",      practice: "Grounding yoga & Pranayama",                  tip: "Contemplate: 'What is the awareness that witnesses all this change? Has it ever changed?'" },
+};
+
+const PRACTICES = {
+  Vata: {
+    emoji: "🌬️",
+    desc: "Vata types benefit from grounding, warming, steady and nourishing practices that bring stability to a mobile, light constitution.",
+    yoga: ["Mountain Pose (Tadasana) — rootedness and presence","Warrior I & II — strength and grounding","Child's Pose (Balasana) — surrender and inner turning","Bridge Pose (Setu Bandha) — grounding the lower body","Savasana extended 15+ minutes — essential for Vata"],
+    pranayama: ["Alternate Nostril Breathing (Nadi Shodhana) — 10 min","Ocean Breath (Ujjayi) — steady and warming","Slow deep breathing: 4-count in, 4-count hold, 8-count out"],
+    mantra: ["So Hum — synchronized with the breath","Om Namah Shivaya — the five-element grounding mantra","Gayatri Mantra — chanted slowly, deliberately"],
+    diet: ["Warm, oily, well-cooked foods","Ghee and sesame oil liberally","Root vegetables and warming soups","Warming spices: ginger, cinnamon, cardamom"],
+    lifestyle: ["Consistent daily routine — same wake, meal and sleep times","Warm oil self-massage (Abhyanga) with sesame oil","Early bedtime (by 10pm)","Minimize travel, screen time and sensory overload"],
+  },
+  Pitta: {
+    emoji: "🔥",
+    desc: "Pitta types benefit from cooling, softening and surrendering practices that quiet the inner fire and cultivate receptivity over achievement.",
+    yoga: ["Moon Salutation (Chandrasana) — cooling alternative to Sun","Gate Pose (Parighasana) — opens side body and emotion","Reclining Bound Angle (Supta Baddha Konasana) — deep release","Legs-Up-the-Wall (Viparita Karani) — cooling inversion","Yoga Nidra — particularly beneficial for Pitta"],
+    pranayama: ["Cooling Breath (Shitali / Sitkari) — direct heat reduction","Left Nostril Breathing (Chandra Bhedana)","Alternate Nostril — balancing and harmonizing"],
+    mantra: ["Om Shanti Shanti Shanti — invocation of peace","Lokah Samastah Sukhino Bhavantu — loving-kindness","Om Namo Narayanaya — oceanic, universal love"],
+    diet: ["Cool, sweet, bitter and astringent foods","Coconut, cucumber, fresh leafy greens","Rose water, mint and fennel","Avoid spicy, fried, fermented and very sour foods"],
+    lifestyle: ["Midday rest in a cool, shaded space","Moon-gazing and slow nature walks","Practice surrender: release attachment to outcomes","Reduce competitive and intense activities"],
+  },
+  Kapha: {
+    emoji: "🌿",
+    desc: "Kapha types benefit from stimulating, lightening and energizing practices that introduce movement and warmth into a naturally stable, heavy constitution.",
+    yoga: ["Sun Salutation — 5 to 10 rounds to generate heat","Camel Pose (Ustrasana) — opens the heart and energizes","Boat Pose (Navasana) — fires the core","Triangle Pose (Trikonasana) — expansive and lightening","Vigorous flowing sequences at a brisk pace"],
+    pranayama: ["Skull-Shining Breath (Kapalabhati) — 5 minutes","Bellows Breath (Bhastrika) — energizing and cleansing","Vigorous Alternate Nostril — stimulating variant"],
+    mantra: ["Om Suryaya Namah — solar invocation","Ram (solar plexus bija) — strong, bright, fired","Vigorous kirtan with percussion and clapping"],
+    diet: ["Light, warm, dry and well-spiced foods","Ginger, black pepper, turmeric and mustard seed","Bitter greens, legumes and millet","Avoid heavy, cold, sweet, oily and dairy-heavy foods"],
+    lifestyle: ["Rise before 6am — the Kapha window","New experiences regularly to prevent stagnation","Group activities and social engagement","Dry brushing (Garshana) before shower"],
+  },
+};
+
+const MANTRAS = [
+  { name: "Om", type: "Universal", color: "#1a6b6b",  desc: "The primordial vibration — used to open and close all practice", use: "All practices, opening invocation" },
+  { name: "So Hum", type: "Vata / All", color: "#5b7ec4", desc: "'I am That' — the natural sound of the breath, dissolving Asmita", use: "Breath meditation, Asmita" },
+  { name: "Gayatri Mantra", type: "All", color: "#9B59B6", desc: "Om Bhur Bhuva Svaha... invoking divine light to illuminate the mind", use: "Dawn & dusk, Avidya dissolution" },
+  { name: "Om Shanti × 3", type: "Pitta", color: "#c45b5b", desc: "Peace in body, mind and spirit — the three-fold invocation of Shanti", use: "Peace, Raga, Pitta balance" },
+  { name: "Om Mani Padme Hum", type: "Pitta", color: "#2980B9", desc: "'The jewel in the lotus' — universal mantra of compassion", use: "Compassion, Dvesha dissolution" },
+  { name: "Mrityunjaya Mantra", type: "Vata", color: "#27AE60", desc: "Om Tryambakam... the death-conquering mantra addressing Abhinivesha", use: "Fear, transition, Abhinivesha" },
+  { name: "Om Namah Shivaya", type: "Vata", color: "#5b7ec4", desc: "Five-syllable mantra corresponding to the five elements — deeply grounding", use: "Grounding, Vata balance, surrender" },
+  { name: "Om Suryaya Namah", type: "Kapha", color: "#c49a2a", desc: "Solar invocation to activate vitality, clarity and inner fire", use: "Morning energy, Kapha activation" },
+  { name: "Lokah Samastah", type: "All", color: "#27AE60", desc: "'May all beings be happy and free' — the loving dedication mantra", use: "Compassion, Dvesha, closing practice" },
+];
+
+const WELLBEING_Q = [
+  { id: "clarity",  label: "Mental Clarity",     desc: "Mind is clear, focused, present" },
+  { id: "peace",    label: "Inner Peace",         desc: "Sense of calm, not reactive" },
+  { id: "energy",   label: "Energy & Vitality",   desc: "Physical and mental aliveness" },
+  { id: "emotion",  label: "Emotional Balance",   desc: "Steady mood, no extreme swings" },
+  { id: "body",     label: "Body Comfort",        desc: "Physical ease, no tension or pain" },
+];
+
+const HABITS = [
+  { id: "meditation", label: "Meditation",         icon: "🧘" },
+  { id: "yoga",       label: "Yoga / Asana",       icon: "🌿" },
+  { id: "pranayama",  label: "Pranayama",           icon: "💨" },
+  { id: "chanting",   label: "Chanting / Mantra",  icon: "🎵" },
+  { id: "abhyanga",   label: "Oil Self-Massage",    icon: "🫧" },
+  { id: "diet",       label: "Dosha-Aligned Diet",  icon: "🥗" },
+  { id: "sleep",      label: "Early Sleep (10pm)",  icon: "🌙" },
+  { id: "nature",     label: "Time in Nature",      icon: "🌳" },
+];
+
+const DINACHARYA = [
+  { time: "4:00 – 5:30am", label: "Brahma Muhurta", icon: "🌟", items: ["Rise before sunrise — the mind is naturally quiet at this hour","Drink warm water with lemon or ginger","Tongue scraping (jihwa nirlekhana) to remove overnight toxins","Oil pulling (gandusha) for oral health and clarity","Seated meditation or mantra japa: 20–40 minutes"] },
+  { time: "6:00 – 8:00am", label: "Morning Practice", icon: "☀️", items: ["Abhyanga — warm oil self-massage appropriate to your Dosha","Warm shower or bath","Yoga asana: 30–60 minutes according to Doshic constitution","Pranayama: 10–20 minutes","Warm, nourishing breakfast — no cold foods"] },
+  { time: "10am – 2pm",    label: "Pitta Window",   icon: "🔥", items: ["Main meal of the day — digestive fire is strongest now","Brief walk or Vajrasana after eating","Focused, demanding work during this window","Avoid emotionally charged conversations if Pitta is high"] },
+  { time: "2:00 – 6pm",   label: "Vata Window",    icon: "💨", items: ["Creative work, communication and collaboration","Brief snack if needed — should be light","Outdoor time: connecting with nature balances all Doshas","Avoid over-stimulation, too many decisions"] },
+  { time: "6:00 – 9:30pm", label: "Evening Wind-Down", icon: "🌙", items: ["Light evening meal — eaten before 7pm","Slow evening walk or gentle movement","Evening chanting, kirtan or bhajan: 15–30 minutes","Journaling or self-inquiry: 'What Klesha was most present today?'","Digital sunset: screens off 1 hour before bed"] },
+  { time: "10:00pm",       label: "Sleep",          icon: "⭐", items: ["Be asleep by 10pm to support Pitta's internal cleansing cycle","Brief yoga nidra or body-scan meditation to release the day","Room cool, dark and quiet","Avoid heavy foods, stimulants or intense content before sleep"] },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
+let state = {
+  profile: null,
+  logs: {},
+  quizPhase: 'dosha', // dosha | klesha
+  quizIndex: 0,
+  dAnswers: {},
+  kAnswers: {},
+  pendingResult: null,
+  logHabits: {},
+  logWellbeing: {},
+  logKlesha: null,
+  charts: {},
+  guideTab: 'dosha',
+};
+
+// ── STORAGE ───────────────────────────────────────────────────────────────────
+
+function storeSave(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+function storeLoad(key) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch(e) { return null; }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+window.addEventListener('DOMContentLoaded', () => {
+  state.profile = storeLoad('hwp');
+  state.logs = storeLoad('hwl') || {};
+  buildTracker();
+  buildGuide();
+  renderHome();
+  setTrackDate();
+  loadTodayLog();
+  updateAssessDot();
+});
+
+function today() {
+  return new Date().toISOString().slice(0,10);
+}
+function fmtDate(d) {
+  return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+function dominantDosha(dosha) {
+  return Object.entries(dosha).sort((a,b) => b[1]-a[1])[0][0];
+}
+function topKlesha(klesha) {
+  return Object.entries(klesha).sort((a,b) => b[1]-a[1])[0][0];
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  if (id === 'progress') renderProgress();
+  if (id === 'guide') renderGuide();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── HOME ──────────────────────────────────────────────────────────────────────
+
+function renderHome() {
+  const p = state.profile;
+  if (!p) {
+    document.getElementById('home-welcome').style.display = 'block';
+    document.getElementById('home-dashboard').style.display = 'none';
+    return;
+  }
+  document.getElementById('home-welcome').style.display = 'none';
+  document.getElementById('home-dashboard').style.display = 'block';
+
+  const dom = dominantDosha(p.dosha);
+  const topK = topKlesha(p.klesha);
+  const dColor = dom === 'Vata' ? 'var(--vata)' : dom === 'Pitta' ? 'var(--pitta)' : 'var(--kapha)';
+
+  // Greeting
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('home-greeting').textContent = greet + ' — your practice awaits.';
+
+  // Dosha banner
+  const banner = document.getElementById('dosha-banner');
+  banner.style.background = dom === 'Vata' ? 'linear-gradient(135deg,#e8eef8,#f8faff)'
+    : dom === 'Pitta' ? 'linear-gradient(135deg,#f8e8e8,#fff8f8)'
+    : 'linear-gradient(135deg,#e8f5ee,#f8fff8)';
+  document.getElementById('dosha-title').textContent = dom + ' Dominant';
+  document.getElementById('dosha-title').style.color = dColor;
+  document.getElementById('dosha-emoji').textContent = PRACTICES[dom].emoji;
+
+  const badges = document.getElementById('dosha-badges');
+  badges.innerHTML = '';
+  Object.entries(p.dosha).forEach(([d,v]) => {
+    const c = d === 'Vata' ? '#5b7ec4' : d === 'Pitta' ? '#c45b5b' : '#5bc47a';
+    badges.innerHTML += `<span class="badge" style="background:${c}22;color:${c};border:1px solid ${c}44">${d}: ${v}/10</span>`;
+  });
+
+  // Klesha
+  const kd = KLESHA_DATA[topK];
+  document.getElementById('home-klesha-name').textContent = topK;
+  document.getElementById('home-klesha-name').style.color = kd.color;
+  document.getElementById('home-klesha-tip').textContent = kd.tip;
+
+  // Mantra
+  document.getElementById('home-mantra').textContent = kd.mantra;
+  document.getElementById('home-mantra-use').textContent = 'For ' + topK + ' — ' + kd.practice;
+
+  // Today's log
+  const tlog = state.logs[today()];
+  if (tlog) {
+    document.getElementById('home-today-empty').style.display = 'none';
+    document.getElementById('home-today-data').style.display = 'block';
+    const hcount = tlog.habits ? Object.values(tlog.habits).filter(Boolean).length : 0;
+    document.getElementById('home-habit-count').textContent = hcount;
+    if (tlog.wellbeing) {
+      const tot = Object.values(tlog.wellbeing).reduce((a,b)=>a+b,0);
+      const pct = Math.round(tot / (WELLBEING_Q.length * 5) * 100);
+      document.getElementById('home-wellbeing-bar').style.width = pct + '%';
+      document.getElementById('home-wellbeing-pct').textContent = pct + '%';
+    }
+  } else {
+    document.getElementById('home-today-empty').style.display = 'block';
+    document.getElementById('home-today-data').style.display = 'none';
+  }
+
+  // Quick stats
+  const logArr = Object.values(state.logs);
+  if (logArr.length > 0) {
+    document.getElementById('home-stats').style.display = 'block';
+    document.getElementById('stat-days').textContent = logArr.length;
+    const wbScores = logArr.filter(l=>l.wellbeing).map(l => {
+      const tot = Object.values(l.wellbeing).reduce((a,b)=>a+b,0);
+      return Math.round(tot / (WELLBEING_Q.length * 5) * 100);
+    });
+    document.getElementById('stat-wellbeing').textContent = wbScores.length ? Math.round(wbScores.reduce((a,b)=>a+b)/wbScores.length) + '%' : '—';
+    document.getElementById('stat-streak').textContent = calcStreak();
+  }
+}
+
+function calcStreak() {
+  const keys = Object.keys(state.logs).sort();
+  if (!keys.length) return 0;
+  let streak = 0;
+  let cur = new Date(today());
+  for (let i = keys.length - 1; i >= 0; i--) {
+    const d = new Date(keys[i] + 'T12:00:00');
+    const diff = Math.round((cur - d) / 86400000);
+    if (diff <= 1) { streak++; cur = d; } else break;
+  }
+  return streak;
+}
+
+// ── ASSESSMENT ────────────────────────────────────────────────────────────────
+
+function updateAssessDot() {
+  document.getElementById('assess-dot').style.display = state.profile ? 'none' : 'inline-block';
+}
+
+function startAssessment() {
+  state.quizPhase = 'dosha';
+  state.quizIndex = 0;
+  state.dAnswers = {};
+  state.kAnswers = {};
+  document.getElementById('assess-intro').style.display = 'none';
+  document.getElementById('assess-quiz').style.display = 'block';
+  document.getElementById('assess-results').style.display = 'none';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const isDo = state.quizPhase === 'dosha';
+  const qs = isDo ? DOSHA_Q : KLESHA_Q;
+  const ans = isDo ? state.dAnswers : state.kAnswers;
+  const i = state.quizIndex;
+  const total = isDo ? DOSHA_Q.length : KLESHA_Q.length;
+  const offset = isDo ? 0 : DOSHA_Q.length;
+
+  document.getElementById('quiz-phase-label').textContent = isDo ? 'PART 1 — DOSHA ASSESSMENT' : 'PART 2 — KLESHA ASSESSMENT';
+  document.getElementById('quiz-part-title').textContent = isDo ? 'Physical & Mental Constitution' : 'Active Mental Afflictions';
+  document.getElementById('quiz-counter').textContent = `${i+1} / ${total}`;
+  const overall = (offset + i) / (DOSHA_Q.length + KLESHA_Q.length) * 100;
+  document.getElementById('quiz-progress-bar').style.width = overall + '%';
+
+  const q = qs[i];
+  document.getElementById('quiz-question-text').textContent = q.q;
+
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = '';
+
+  const labels = isDo ? q.opts : ['Never (0)', 'Rarely (1)', 'Sometimes (2)', 'Often (3)', 'Very Often (4)'];
+  labels.forEach((opt, oi) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn' + (ans[i] === oi ? ' selected' : '');
+    btn.innerHTML = `<span class="opt-num">${isDo ? ['V','P','K'][oi] : oi}</span>${opt}`;
+    btn.onclick = () => {
+      if (isDo) state.dAnswers[i] = oi; else state.kAnswers[i] = oi;
+      document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('quiz-next-btn').disabled = false;
+    };
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('quiz-next-btn').disabled = ans[i] === undefined;
+  document.getElementById('quiz-next-btn').textContent = (i === total - 1 && !isDo) ? 'See My Results →' : i === total - 1 && isDo ? 'Continue to Part 2 →' : 'Next →';
+}
+
+function quizNext() {
+  const isDo = state.quizPhase === 'dosha';
+  const total = isDo ? DOSHA_Q.length : KLESHA_Q.length;
+  state.quizIndex++;
+  if (state.quizIndex < total) {
+    renderQuestion();
+  } else if (isDo) {
+    state.quizPhase = 'klesha';
+    state.quizIndex = 0;
+    renderQuestion();
+  } else {
+    computeAndShowResults();
+  }
+}
+
+function computeAndShowResults() {
+  const dosha = { Vata: 0, Pitta: 0, Kapha: 0 };
+  Object.values(state.dAnswers).forEach(v => {
+    if (v === 0) dosha.Vata++;
+    else if (v === 1) dosha.Pitta++;
+    else dosha.Kapha++;
+  });
+
+  const klesha = { Avidya: 0, Asmita: 0, Raga: 0, Dvesha: 0, Abhinivesha: 0 };
+  const counts = { Avidya: 0, Asmita: 0, Raga: 0, Dvesha: 0, Abhinivesha: 0 };
+  KLESHA_Q.forEach((q, i) => {
+    if (state.kAnswers[i] !== undefined) {
+      klesha[q.klesha] += state.kAnswers[i];
+      counts[q.klesha]++;
+    }
+  });
+  Object.keys(klesha).forEach(k => {
+    klesha[k] = counts[k] ? Math.round(klesha[k] / (counts[k] * 4) * 100) : 0;
+  });
+
+  state.pendingResult = { dosha, klesha };
+  showResults(state.pendingResult);
+}
+
+function showResults(r) {
+  document.getElementById('assess-quiz').style.display = 'none';
+  document.getElementById('assess-results').style.display = 'block';
+
+  const dom = dominantDosha(r.dosha);
+  const topK = topKlesha(r.klesha);
+  const dColor = dom === 'Vata' ? '#5b7ec4' : dom === 'Pitta' ? '#c45b5b' : '#5bc47a';
+
+  // Dosha dominant
+  const dd = document.getElementById('result-dosha-dominant');
+  dd.innerHTML = `<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+    <span style="font-size:40px">${PRACTICES[dom].emoji}</span>
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:${dColor}">${dom} Dominant</div>
+      <div style="font-size:13px;color:var(--ink-light)">Your Prakriti (original constitutional nature)</div>
+    </div>
+  </div>`;
+
+  // Dosha bars
+  const db = document.getElementById('result-dosha-bars');
+  db.innerHTML = '';
+  Object.entries(r.dosha).forEach(([d,v]) => {
+    const c = d === 'Vata' ? '#5b7ec4' : d === 'Pitta' ? '#c45b5b' : '#5bc47a';
+    db.innerHTML += `<div class="progress-wrap">
+      <div class="progress-header">
+        <span style="font-size:14px;font-weight:600;color:${c}">${d}</span>
+        <span style="font-size:13px;color:${c}">${v}/10</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="background:${c};width:${v*10}%"></div></div>
+    </div>`;
+  });
+
+  // Dosha desc
+  document.getElementById('result-dosha-desc').textContent = PRACTICES[dom].desc;
+
+  // Klesha bars
+  const kb = document.getElementById('result-klesha-bars');
+  kb.innerHTML = '';
+  Object.entries(r.klesha).sort((a,b)=>b[1]-a[1]).forEach(([k,v]) => {
+    const c = KLESHA_DATA[k].color;
+    kb.innerHTML += `<div class="progress-wrap">
+      <div class="progress-header">
+        <span style="font-size:14px;font-weight:600;color:${c}">${k}</span>
+        <span class="badge" style="background:${c}22;color:${c};border:1px solid ${c}44;font-size:11px">${v}% active</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="background:${c};width:${v}%"></div></div>
+      <p style="font-size:12px;color:var(--ink-light);margin-top:4px;font-style:italic">Mantra: ${KLESHA_DATA[k].mantra}</p>
+    </div>`;
+  });
+
+  // Protocol
+  const kd = KLESHA_DATA[topK];
+  const pr = document.getElementById('result-protocol');
+  pr.innerHTML = `
+    <div style="display:grid;gap:12px">
+      <div style="padding:14px;background:var(--teal-xs);border-radius:10px">
+        <p class="label" style="color:var(--teal);margin-bottom:6px">Primary Yoga Style</p>
+        <p style="font-size:14px;color:var(--ink)">${PRACTICES[dom].yoga[0]} · ${PRACTICES[dom].yoga[1]}</p>
+      </div>
+      <div style="padding:14px;background:var(--gold-soft);border-radius:10px">
+        <p class="label" style="color:var(--gold);margin-bottom:6px">Primary Mantra (for ${topK})</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--ink)">${kd.mantra}</p>
+        <p style="font-size:12px;color:var(--ink-light);margin-top:4px;font-style:italic">${kd.tip}</p>
+      </div>
+      <div style="padding:14px;background:var(--cream);border-radius:10px;border:1px solid rgba(26,107,107,0.08)">
+        <p class="label" style="color:var(--ink-light);margin-bottom:6px">Core Practice</p>
+        <p style="font-size:14px;color:var(--ink)">${kd.practice}</p>
+      </div>
+    </div>`;
+}
+
+function saveAssessment() {
+  state.profile = state.pendingResult;
+  storeSave('hwp', state.profile);
+  document.getElementById('assess-intro').style.display = 'block';
+  document.getElementById('assess-results').style.display = 'none';
+  document.getElementById('assess-intro').querySelector('#retake-note').style.display = 'block';
+  updateAssessDot();
+  renderHome();
+  buildGuide();
+  showToast('Assessment saved! ✓');
+  showPage('home');
+}
+
+// ── TRACKER ───────────────────────────────────────────────────────────────────
+
+function setTrackDate() {
+  const el = document.getElementById('track-date-display');
+  el.textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+}
+
+function buildTracker() {
+  // Habits
+  const hg = document.getElementById('habits-grid');
+  hg.innerHTML = '';
+  HABITS.forEach(h => {
+    const div = document.createElement('button');
+    div.className = 'habit-btn';
+    div.id = 'habit-' + h.id;
+    div.innerHTML = `<span class="habit-icon">${h.icon}</span><span>${h.label}</span><span class="habit-check">✓</span>`;
+    div.onclick = () => toggleHabit(h.id);
+    hg.appendChild(div);
+  });
+
+  // Wellbeing
+  const wg = document.getElementById('wellbeing-grid');
+  wg.innerHTML = '';
+  WELLBEING_Q.forEach(wq => {
+    const row = document.createElement('div');
+    row.style.cssText = 'margin-bottom:18px';
+    row.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px">
+      <div><span style="font-size:14px;font-weight:600;color:var(--ink)">${wq.label}</span>
+      <span style="font-size:12px;color:var(--ink-light);margin-left:8px;font-style:italic">${wq.desc}</span></div>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--teal)" id="wb-val-${wq.id}">—</span>
+    </div>
+    <div class="rating-row" id="wb-row-${wq.id}">
+      ${[1,2,3,4,5].map(n => `<button class="rating-btn" id="wb-${wq.id}-${n}" onclick="setWellbeing('${wq.id}',${n})">${n}</button>`).join('')}
+    </div>`;
+    wg.appendChild(row);
+  });
+
+  // Klesha today
+  const kg = document.getElementById('klesha-today-btns');
+  kg.innerHTML = '';
+  Object.entries(KLESHA_DATA).forEach(([k, d]) => {
+    const btn = document.createElement('button');
+    btn.id = 'ktbtn-' + k;
+    btn.style.cssText = `padding:8px 16px;border-radius:20px;border:1.5px solid ${d.color}44;background:${d.color}11;color:${d.color};font-family:'Jost',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s`;
+    btn.textContent = k;
+    btn.onclick = () => setKleshaDayBtn(k);
+    kg.appendChild(btn);
+  });
+
+  updateHabitCount();
+}
+
+function loadTodayLog() {
+  const tlog = state.logs[today()];
+  if (!tlog) return;
+  if (tlog.habits) {
+    state.logHabits = tlog.habits;
+    HABITS.forEach(h => {
+      const btn = document.getElementById('habit-' + h.id);
+      if (btn && state.logHabits[h.id]) btn.classList.add('checked');
+    });
+  }
+  if (tlog.wellbeing) {
+    state.logWellbeing = tlog.wellbeing;
+    WELLBEING_Q.forEach(wq => {
+      if (state.logWellbeing[wq.id]) setWellbeing(wq.id, state.logWellbeing[wq.id], true);
+    });
+  }
+  if (tlog.klesha) setKleshaDayBtn(tlog.klesha);
+  if (tlog.notes) document.getElementById('notes-area').value = tlog.notes;
+  updateHabitCount();
+}
+
+function toggleHabit(id) {
+  state.logHabits[id] = !state.logHabits[id];
+  const btn = document.getElementById('habit-' + id);
+  if (state.logHabits[id]) btn.classList.add('checked'); else btn.classList.remove('checked');
+  updateHabitCount();
+}
+
+function updateHabitCount() {
+  const done = Object.values(state.logHabits).filter(Boolean).length;
+  const total = HABITS.length;
+  document.getElementById('habit-done-count').textContent = done;
+  document.getElementById('habit-total-count').textContent = total;
+  document.getElementById('habit-mini-bar').style.width = (done/total*100) + '%';
+}
+
+function setWellbeing(id, val, quiet) {
+  state.logWellbeing[id] = val;
+  document.getElementById('wb-val-' + id).textContent = val;
+  [1,2,3,4,5].forEach(n => {
+    const btn = document.getElementById(`wb-${id}-${n}`);
+    if (btn) btn.className = 'rating-btn' + (n <= val ? ' active' : '');
+  });
+}
+
+function setKleshaDayBtn(k) {
+  state.logKlesha = k;
+  Object.keys(KLESHA_DATA).forEach(kk => {
+    const btn = document.getElementById('ktbtn-' + kk);
+    if (!btn) return;
+    const d = KLESHA_DATA[kk];
+    if (kk === k) {
+      btn.style.background = d.color + '33';
+      btn.style.borderColor = d.color;
+      btn.style.fontWeight = '700';
+    } else {
+      btn.style.background = d.color + '11';
+      btn.style.borderColor = d.color + '44';
+      btn.style.fontWeight = '500';
+    }
+  });
+  document.getElementById('klesha-today-remedy').style.display = 'block';
+  document.getElementById('klesha-remedy-text').textContent = KLESHA_DATA[k].mantra + ' — ' + KLESHA_DATA[k].practice;
+  document.getElementById('klesha-remedy-text').style.color = KLESHA_DATA[k].color;
+}
+
+function saveLog() {
+  const entry = {
+    habits: { ...state.logHabits },
+    wellbeing: { ...state.logWellbeing },
+    klesha: state.logKlesha,
+    notes: document.getElementById('notes-area').value,
+    date: today()
+  };
+  state.logs[today()] = entry;
+  storeSave('hwl', state.logs);
+  renderHome();
+  showToast('Practice log saved ✓');
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────────────────
+
+function renderProgress() {
+  const entries = Object.entries(state.logs).sort((a,b)=>a[0].localeCompare(b[0])).slice(-21);
+
+  if (entries.length === 0) {
+    document.getElementById('progress-empty').style.display = 'block';
+    document.getElementById('progress-data').style.display = 'none';
+    return;
+  }
+  document.getElementById('progress-empty').style.display = 'none';
+  document.getElementById('progress-data').style.display = 'block';
+
+  // Stats
+  const n = entries.length;
+  document.getElementById('p-days').textContent = n;
+  const wbAll = entries.filter(([,l])=>l.wellbeing).map(([,l]) => {
+    const tot = Object.values(l.wellbeing).reduce((a,b)=>a+b,0);
+    return Math.round(tot / (WELLBEING_Q.length * 5) * 100);
+  });
+  document.getElementById('p-wellbeing').textContent = wbAll.length ? Math.round(wbAll.reduce((a,b)=>a+b)/wbAll.length) + '%' : '—';
+  document.getElementById('p-streak').textContent = calcStreak();
+
+  const labels = entries.map(([d]) => fmtDate(d));
+  const wbScores = entries.map(([,l]) => {
+    if (!l.wellbeing) return null;
+    const t = Object.values(l.wellbeing).reduce((a,b)=>a+b,0);
+    return Math.round(t / (WELLBEING_Q.length * 5) * 100);
+  });
+  const habitCounts = entries.map(([,l]) => l.habits ? Object.values(l.habits).filter(Boolean).length : 0);
+
+  // Destroy old charts
+  Object.values(state.charts).forEach(c => { try { c.destroy(); } catch(e) {} });
+  state.charts = {};
+
+  // Wellbeing trend
+  state.charts.wb = new Chart(document.getElementById('chart-wellbeing').getContext('2d'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: 'Wellbeing %', data: wbScores, borderColor: '#1a6b6b', backgroundColor: 'rgba(26,107,107,0.08)', borderWidth: 2.5, fill: true, tension: 0.4, pointBackgroundColor: '#1a6b6b', pointRadius: 4, spanGaps: true }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 100, grid: { color: 'rgba(26,107,107,0.06)' }, ticks: { font: { family: 'Jost' } } }, x: { grid: { color: 'rgba(26,107,107,0.06)' }, ticks: { font: { family: 'Jost' }, maxRotation: 0 } } } }
+  });
+
+  // Dimensions
+  const dimColors = ['#1a6b6b','#8b6914','#5b7ec4','#c45b5b','#5bc47a'];
+  const dimDatasets = WELLBEING_Q.map((wq, i) => ({
+    label: wq.label,
+    data: entries.map(([,l]) => l.wellbeing ? (l.wellbeing[wq.id] || 0) : null),
+    borderColor: dimColors[i], borderWidth: 1.5, fill: false, tension: 0.4, pointRadius: 2, spanGaps: true
+  }));
+  state.charts.dim = new Chart(document.getElementById('chart-dimensions').getContext('2d'), {
+    type: 'line',
+    data: { labels, datasets: dimDatasets },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { family: 'Jost', size: 11 }, boxWidth: 12, padding: 8 } } }, scales: { y: { min: 0, max: 5, ticks: { stepSize: 1, font: { family: 'Jost' } }, grid: { color: 'rgba(26,107,107,0.06)' } }, x: { ticks: { font: { family: 'Jost' }, maxRotation: 0 }, grid: { color: 'rgba(26,107,107,0.06)' } } } }
+  });
+
+  // Habits bar
+  state.charts.habits = new Chart(document.getElementById('chart-habits').getContext('2d'), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Practices Completed', data: habitCounts, backgroundColor: 'rgba(196,154,42,0.7)', borderColor: '#8b6914', borderWidth: 1, borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: HABITS.length, ticks: { stepSize: 2, font: { family: 'Jost' } }, grid: { color: 'rgba(26,107,107,0.06)' } }, x: { ticks: { font: { family: 'Jost' }, maxRotation: 0 }, grid: { display: false } } } }
+  });
+
+  // Klesha frequency
+  const kFreq = { Avidya:0, Asmita:0, Raga:0, Dvesha:0, Abhinivesha:0 };
+  entries.forEach(([,l]) => { if (l.klesha && kFreq[l.klesha] !== undefined) kFreq[l.klesha]++; });
+  state.charts.klesha = new Chart(document.getElementById('chart-kleshas').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: Object.keys(kFreq),
+      datasets: [{ label: 'Days Active', data: Object.values(kFreq), backgroundColor: Object.keys(kFreq).map(k => KLESHA_DATA[k].color + 'aa'), borderColor: Object.keys(kFreq).map(k => KLESHA_DATA[k].color), borderWidth: 1.5, borderRadius: 6 }]
+    },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Jost' } }, grid: { color: 'rgba(26,107,107,0.06)' } }, y: { ticks: { font: { family: 'Jost', weight: '600' } }, grid: { display: false } } } }
+  });
+}
+
+// ── GUIDE ─────────────────────────────────────────────────────────────────────
+
+function buildGuide() {
+  renderGuide();
+}
+
+function showGuideTab(tab) {
+  ['dosha','klesha','mantras','dinacharya'].forEach(t => {
+    document.getElementById('guide-' + t).style.display = t === tab ? 'block' : 'none';
+    document.getElementById('gtab-' + t).className = 'inner-tab' + (t === tab ? ' active' : '');
+  });
+  state.guideTab = tab;
+}
+
+function renderGuide() {
+  const p = state.profile;
+  const dom = p ? dominantDosha(p.dosha) : 'Vata';
+  const topK = p ? topKlesha(p.klesha) : 'Avidya';
+
+  // DOSHA GUIDE
+  const banner = document.getElementById('guide-dosha-banner');
+  if (p) {
+    banner.innerHTML = `<span>✦</span><span>Showing your personalized protocol for <strong>${dom}</strong> constitution with <strong>${topK}</strong> as primary Klesha</span>`;
+    banner.className = 'alert alert-info';
+  } else {
+    banner.innerHTML = `<span>◎</span><span>Complete your <button onclick="showPage('assess')" style="background:none;border:none;color:var(--teal);cursor:pointer;font-weight:600;text-decoration:underline;font-size:14px">assessment</button> for a personalized protocol. Showing Vata as default.</span>`;
+    banner.className = 'alert alert-gold';
+  }
+
+  const pr = PRACTICES[dom];
+  const sections = [
+    { title: 'Yoga Asanas', icon: '🌿', items: pr.yoga },
+    { title: 'Pranayama', icon: '💨', items: pr.pranayama },
+    { title: 'Mantra & Chanting', icon: '🎵', items: pr.mantra },
+    { title: 'Diet Principles', icon: '🥗', items: pr.diet },
+    { title: 'Lifestyle', icon: '☀️', items: pr.lifestyle },
+  ];
+
+  const gc = document.getElementById('guide-dosha-content');
+  gc.innerHTML = sections.map(s => `
+    <div class="card" style="margin-bottom:14px">
+      <div class="subheading" style="margin-bottom:12px; color:var(--gold)">${s.icon} ${s.title}</div>
+      ${s.items.map(item => `<div class="practice-row"><div class="practice-dot"></div><div style="font-size:14px;line-height:1.6;color:var(--ink)">${item}</div></div>`).join('')}
+    </div>`).join('');
+
+  // KLESHA GUIDE
+  const kc = document.getElementById('guide-klesha-content');
+  kc.innerHTML = Object.entries(KLESHA_DATA).map(([k, d]) => {
+    const isPrimary = k === topK && p;
+    return `<div class="klesha-card" style="border-left:4px solid ${d.color}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:${d.color}">${k}</div>
+          ${isPrimary ? `<span class="badge" style="background:${d.color}22;color:${d.color};border:1px solid ${d.color}44;margin-top:4px">Your Primary Klesha ✦</span>` : ''}
+        </div>
+      </div>
+      <div style="display:grid;gap:10px">
+        <div style="padding:12px 14px;background:${d.color}10;border-radius:8px">
+          <p class="label" style="color:${d.color};margin-bottom:6px">Recommended Mantra</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--ink)">${d.mantra}</p>
+        </div>
+        <div style="padding:12px 14px;background:var(--cream);border-radius:8px">
+          <p class="label" style="color:var(--ink-light);margin-bottom:6px">Core Practice</p>
+          <p style="font-size:14px;color:var(--ink)">${d.practice}</p>
+        </div>
+        <div style="padding:12px 14px;background:var(--gold-soft);border-radius:8px">
+          <p class="label" style="color:var(--gold);margin-bottom:6px">Daily Reflection Tip</p>
+          <p style="font-size:14px;color:var(--ink);font-style:italic">${d.tip}</p>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // MANTRAS GUIDE
+  const mc = document.getElementById('guide-mantras-content');
+  mc.innerHTML = MANTRAS.map(m => {
+    const c = m.color;
+    const typeColor = m.type.includes('Vata') ? '#5b7ec4' : m.type.includes('Pitta') ? '#c45b5b' : m.type.includes('Kapha') ? '#5bc47a' : '#1a6b6b';
+    return `<div class="mantra-card">
+      <div class="mantra-icon">🔔</div>
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:5px">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;font-weight:600;color:${c}">${m.name}</div>
+          <span class="badge" style="background:${typeColor}18;color:${typeColor};border:1px solid ${typeColor}33">${m.type}</span>
+        </div>
+        <p style="font-size:13px;color:var(--ink-mid);margin-bottom:4px">${m.desc}</p>
+        <p style="font-size:12px;color:var(--gold);font-style:italic">Best for: ${m.use}</p>
+      </div>
+    </div>`;
+  }).join('');
+
+  // DINACHARYA GUIDE
+  const dc = document.getElementById('guide-dinacharya-content');
+  dc.innerHTML = `
+    <div class="quote-block" style="margin-bottom:20px">
+      "The conduct of the day (Dinacharya) is one of the most powerful tools in Ayurveda for maintaining health and dissolving the Kleshas through the rhythm of natural law."
+    </div>
+    ${DINACHARYA.map(slot => `
+      <div class="card" style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="font-size:28px">${slot.icon}</div>
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal)">${slot.time}</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink)">${slot.label}</div>
+          </div>
+        </div>
+        ${slot.items.map(item => `<div class="practice-row"><div class="practice-dot"></div><div style="font-size:14px;line-height:1.6;color:var(--ink)">${item}</div></div>`).join('')}
+      </div>`).join('')}`;
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Initial render ─────────────────────────────────────────────────────────────
+// (Handled by DOMContentLoaded above)
+</script>
+</body>
+</html>
